@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Socket Test</title>
+    <!-- 1. Load the Socket.io client library from a CDN -->
+    <script src="https://unpkg.com/socket.io-client@4.8.0/dist/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Socket.io Test Client</h1>
+    <p>Open your browser's Developer Console (F12 or Right-Click -> Inspect -> Console) to see the logs.</p>
+    <button onclick="sendTestMessage()">Send Test Message</button>
+
+    <script>
+        // 2. Connect to our running Express server
+        const socket = io('http://localhost:5000');
+
+        // 3. Listen for a successful connection
+        socket.on('connect', () => {
+            console.log('✅ Connected to server with ID:', socket.id);
+        });
+
+        // 4. Listen for broadcasts coming FROM the server
+        socket.on('receiveMessage', (data) => {
+            console.log('📩 New message received from server:', data);
+        });
+
+        // 5. Function to send data TO the server when button is clicked
+        function sendTestMessage() {
+            const messageData = { text: 'Hello from the HTML test client!' };
+            socket.emit('sendMessage', messageData);
+            console.log('📤 Message sent to server');
+        }
+    </script>
+</body>
+</html>

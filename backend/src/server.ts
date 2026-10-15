@@ -2,7 +2,8 @@ import http from 'node:http';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 // Note: We use .js here even though the file is .ts! This is a modern TypeScript rule.
-import app from './app.js'; 
+import app from './app.js';
+import { initializeSocket } from './sockets/socket.js';
 
 // 1. Load hidden variables (like PORT) from a .env file
 dotenv.config();
@@ -14,6 +15,8 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
 connectDB();
+
+initializeSocket(server);
 
 // 4. Open the door and start listening for traffic
 server.listen(PORT, () => {
