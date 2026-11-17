@@ -1,7 +1,8 @@
-import mongoose, { Schema, Document, Types } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IMessage extends Document {
-  senderId: Types.ObjectId; // Links to the User who sent it
+  senderId: mongoose.Types.ObjectId;
+  receiverId: mongoose.Types.ObjectId;
   text: string;
   createdAt: Date;
   updatedAt: Date;
@@ -11,19 +12,22 @@ const messageSchema = new Schema<IMessage>(
   {
     senderId: {
       type: Schema.Types.ObjectId,
-      ref: 'User', // Tells Mongoose this ID belongs to the 'User' collection
+      ref: 'User',
+      required: true,
+    },
+    receiverId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     text: {
       type: String,
       required: true,
+      trim: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 const Message = mongoose.model<IMessage>('Message', messageSchema);
-
 export default Message;

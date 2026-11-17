@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import { sendMessage, getMessages } from '../controllers/messageController.js';
 import { protectRoute } from '../middlewares/protectRoute.js';
+import { sendMessage, getMessages } from '../controllers/messageController.js';
 
 const router = Router();
 
-// Both routes need the bouncer! You must be logged in to chat.
-router.post('/', protectRoute, sendMessage);
-router.get('/', protectRoute, getMessages);
+// Fetch 1-on-1 message history between logged-in user and user :id
+router.get('/:id', protectRoute, getMessages);
+
+// Send a private message to user :id
+router.post('/send/:id', protectRoute, sendMessage);
 
 export default router;
